@@ -9,6 +9,11 @@ Source0:	ftp://ftp.informatik.tu-darmstadt.de/pub/TI/systems/LiDIA/current/lidia
 URL:		http://www.informatik.tu-darmstadt.de/TI/LiDIA/
 BuildRequires:	gmp-devel
 BuildRequires:	libstdc++-devel
+BuildRequires:	tetex-dvips
+BuildRequires:	tetex-format-latex
+BuildRequires:	tetex-format-pdflatex
+BuildRequires:	tetex-latex-ae
+BuildRequires:	texinfo-texi2dvi
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -38,12 +43,12 @@ file COPYING. Contributors are welcome.
 	--enable-shared
 %{__make}
 %{__make} examples
-#%{__make} pdf
+%{__make} pdf
 
 %install
 rm -rf $RPM_BUILD_ROOT
 %{__make} install \
-	DESTDIR=$RPM_BUILD_ROOT	# install-examples
+	DESTDIR=$RPM_BUILD_ROOT
 
 ln -sf lidia $RPM_BUILD_ROOT%{_includedir}/%{name}
 ln -sf lidia $RPM_BUILD_ROOT%{_datadir}/%{name}
@@ -54,7 +59,7 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(644,root,root,755)
 %doc COPYING NEWS README TODO
-#%doc doc/LiDIA.pdf
+%doc doc/LiDIA.pdf
 %attr(755,root,root) %{_libdir}/lib*.so*
 %{_libdir}/lib*.la
 %{_includedir}/lidia
