@@ -45,8 +45,11 @@ rm -rf $RPM_BUILD_ROOT
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT	# install-examples
 
+ln -sf lidia $RPM_BUILD_ROOT%{_includedir}/%{name}
+ln -sf lidia $RPM_BUILD_ROOT%{_datadir}/%{name}
+
 %clean
-rm -rf "$RPM_BUILD_ROOT"
+rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
@@ -57,3 +60,4 @@ rm -rf "$RPM_BUILD_ROOT"
 %{_includedir}/lidia
 %{_includedir}/%{name}
 %{_datadir}/lidia
+%{_datadir}/%{name}
