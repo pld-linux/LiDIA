@@ -1,8 +1,9 @@
 Summary:	C++ library for number theoretical computations
+Summary(pl.UTF-8):	Biblioteka C++ do teoretycznych obliczeń numerycznych
 Name:		LiDIA
 Version:	2.2.0
 Release:	0.1
-License:	noncommercial
+License:	non-commercial
 Group:		Development/Libraries
 Source0:	ftp://ftp.informatik.tu-darmstadt.de/pub/TI/systems/LiDIA/current/lidia-%{version}.tar.gz
 # Source0-md5:	d9e012bb666e7a7ba1b45283aa3bfe03
@@ -34,6 +35,26 @@ elliptic curves; and more...
 
 LiDIA is free for non-commercial use. See the copyright notice in the
 file COPYING. Contributors are welcome.
+
+%description -l pl.UTF-8
+LiDIA to biblioteka C++ do teoretycznych obliczeń numerycznych.
+Udostępnia sparametryzowane oraz wyspecjalizowane klasy wraz z
+zaawansowanymi metodami do obliczeń w wielu grupach, pierścieniach i
+przestrzeniach, od liczb całkowitych dowolnej długości, ułamków i
+przybliżeń zmiennoprzecinkowych przez wektory i macierze do
+konstrukcji wysokopoziomowych, takich jak przestrzenie skończone,
+kraty, przestrzenie kwadratowe i wyższego stopnia, pierścienie
+wielomianów i krzywe eliptyczne. Oprócz bogatego zbioru metod do
+podstawowych operacji strukturalnych, wejścia/wyjścia, arytmetycznych
+i ogólnych prymitywów teoretycznonumerycznych są także funkcje do
+bardziej złożonych obliczeń: redukcji baz krat; rozkładu wielomianów,
+liczb całkowitych i ideałów algebraicznych; obliczania logarytmów
+dyskretnych; określania porządku w grupie na krzywych eliptycznych;
+itp.
+
+LiDIA jest darmowa do użytku niekomercyjnego. Informacje o prawach
+autorskich znajdują się w pliku COPYING. Wspieranie rozwoju jest mile
+widziane.
 
 %prep
 %setup -q -n lidia-%{version}
