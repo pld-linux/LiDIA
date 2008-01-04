@@ -4,9 +4,10 @@ Name:		LiDIA
 Version:	2.2.0
 Release:	0.1
 License:	non-commercial
-Group:		Development/Libraries
+Group:		Libraries
 Source0:	ftp://ftp.informatik.tu-darmstadt.de/pub/TI/systems/LiDIA/current/lidia-%{version}.tar.gz
 # Source0-md5:	d9e012bb666e7a7ba1b45283aa3bfe03
+Patch0:		lidia-fixes.patch
 URL:		http://www.informatik.tu-darmstadt.de/TI/LiDIA/
 BuildRequires:	gmp-devel
 BuildRequires:	libstdc++-devel
@@ -56,18 +57,46 @@ LiDIA jest darmowa do użytku niekomercyjnego. Informacje o prawach
 autorskich znajdują się w pliku COPYING. Wspieranie rozwoju jest mile
 widziane.
 
+%package devel
+Summary:	Header files for LiDIA library
+Summary(pl.UTF-8):	Pliki nagłówkowe biblioteki LiDIA
+Group:		Development/Libraries
+Requires:	%{name} = %{version}-%{release}
+
+%description devel
+Header files for LiDIA library.
+
+%description devel -l pl.UTF-8
+Pliki nagłówkowe biblioteki LiDIA.
+
+%package static
+Summary:	Static LiDIA library
+Summary(pl.UTF-8):	Statyczna biblioteka LiDIA
+Group:		Development/Libraries
+Requires:	%{name}-devel = %{version}-%{release}
+
+%description static
+Static LiDIA library.
+
+%description static -l pl.UTF-8
+Statyczna biblioteka LiDIA.
+
 %prep
 %setup -q -n lidia-%{version}
+%patch0 -p1
 
 %build
 %configure \
 	--enable-shared
 %{__make}
 %{__make} examples
-%{__make} pdf
+# "unknown language: LaTeX"
+%{__make} pdf \
+	LATEX2DVI='$(TEXI2DVI) -l latex'
 
 %install
 rm -rf $RPM_BUILD_ROOT
+
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
@@ -77,13 +106,25 @@ ln -sf lidia $RPM_BUILD_ROOT%{_datadir}/%{name}
 %clean
 rm -rf $RPM_BUILD_ROOT
 
+%post	-p /sbin/ldconfig
+%postun	-p /sbin/ldconfig
+
 %files
 %defattr(644,root,root,755)
-%doc COPYING NEWS README TODO
-%doc doc/LiDIA.pdf
-%attr(755,root,root) %{_libdir}/lib*.so*
-%{_libdir}/lib*.la
-%{_includedir}/lidia
-%{_includedir}/%{name}
+%doc COPYING ChangeLog NEWS README TODO
+%attr(755,root,root) %{_libdir}/libLiDIA.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libLiDIA.so.5
 %{_datadir}/lidia
 %{_datadir}/%{name}
+
+%files devel
+%defattr(644,root,root,755)
+%doc doc/LiDIA.pdf
+%attr(755,root,root) %{_libdir}/libLiDIA.so
+%{_libdir}/libLiDIA.la
+%{_includedir}/lidia
+%{_includedir}/%{name}
+
+%files static
+%defattr(644,root,root,755)
+%{_libdir}/libLiDIA.a
