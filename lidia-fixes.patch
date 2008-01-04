@@ -1,0 +1,232 @@
+--- lidia-2.2.0/src/base/include/LiDIA/matrix/sparse_ring_matrix_kernel.cc.orig	2006-03-06 13:24:06.000000000 +0100
++++ lidia-2.2.0/src/base/include/LiDIA/matrix/sparse_ring_matrix_kernel.cc	2008-01-03 22:57:26.038735205 +0100
+@@ -154,7 +154,7 @@ sparse_ring_matrix_kernel< T >::add (MR<
+ 	lidia_size_t counter;
+ 
+ 	if (a == RES.Zero)
+-		assign(RES, M);
++		SBMK< T >::assign(RES, M);
+ 	else
+ 		for (i = 0; i < RES.rows; i++) {
+ 			// Memory allocation
+@@ -220,7 +220,7 @@ sparse_ring_matrix_kernel< T >::add (MR<
+ 	lidia_size_t counter;
+ 
+ 	if (a == RES.Zero)
+-		assign(RES, M);
++		SBMK< T >::assign(RES, M);
+ 	else
+ 		for (i = 0; i < RES.rows; i++) {
+ 			// Memory allocation
+@@ -371,7 +371,7 @@ sparse_ring_matrix_kernel< T >::subtract
+ 	lidia_size_t counter;
+ 
+ 	if (a == RES.Zero)
+-		assign(RES, M);
++		SBMK< T >::assign(RES, M);
+ 	else
+ 		for (i = 0; i < RES.rows; i++) {
+ 			// Memory allocation
+@@ -437,7 +437,7 @@ sparse_ring_matrix_kernel< T >::subtract
+ 	lidia_size_t counter;
+ 
+ 	if (a == RES.Zero)
+-		assign(RES, M);
++		SBMK< T >::assign(RES, M);
+ 	else
+ 		for (i = 0; i < RES.rows; i++) {
+ 			// Memory allocation
+--- lidia-2.2.0/src/base/include/LiDIA/ring_matrix.h.orig	2006-03-06 13:24:06.000000000 +0100
++++ lidia-2.2.0/src/base/include/LiDIA/ring_matrix.h	2008-01-03 21:42:00.885264199 +0100
+@@ -122,7 +122,7 @@ public:
+ 
+ 	ring_matrix< T > & operator = (const ring_matrix< T > &B)
+ 	{
+-		assign(B);
++		base_matrix< T >::assign(B);
+ 		return *this;
+ 	}
+ 
+--- lidia-2.2.0/src/base/include/LiDIA/dense_ring_matrix.h.orig	2006-03-06 13:24:06.000000000 +0100
++++ lidia-2.2.0/src/base/include/LiDIA/dense_ring_matrix.h	2008-01-03 22:22:09.401286287 +0100
+@@ -91,7 +91,7 @@ public:
+ 
+ 	dense_ring_matrix< T > & operator = (const dense_ring_matrix< T > &B)
+ 	{
+-		assign(B);
++		dense_base_matrix< T >::assign(B);
+ 		return *this;
+ 	}
+ 
+--- lidia-2.2.0/src/base/include/LiDIA/dense_field_matrix.h.orig	2006-03-06 13:24:06.000000000 +0100
++++ lidia-2.2.0/src/base/include/LiDIA/dense_field_matrix.h	2008-01-03 22:04:32.969698378 +0100
+@@ -93,7 +93,7 @@ public:
+ 
+ 	dense_field_matrix< T > & operator = (const dense_field_matrix< T > &B)
+ 	{
+-		assign(B);
++		dense_base_matrix< T >::assign(B);
+ 		return *this;
+ 	}
+ 
+--- lidia-2.2.0/src/base/include/LiDIA/sparse_field_matrix.h.orig	2006-03-06 13:24:06.000000000 +0100
++++ lidia-2.2.0/src/base/include/LiDIA/sparse_field_matrix.h	2008-01-03 22:18:21.648725024 +0100
+@@ -97,7 +97,7 @@ public:
+ 
+ 	sparse_field_matrix< T > & operator = (const sparse_field_matrix< T > &B)
+ 	{
+-		assign(B);
++		sparse_base_matrix< T >::assign(B);
+ 		return *this;
+ 	}
+ 
+--- lidia-2.2.0/src/base/include/LiDIA/field_matrix.h.orig	2006-03-06 13:24:06.000000000 +0100
++++ lidia-2.2.0/src/base/include/LiDIA/field_matrix.h	2008-01-03 22:10:48.653744758 +0100
+@@ -132,7 +132,7 @@ public:
+ 
+ 	field_matrix< T > & operator = (const field_matrix< T > &B)
+ 	{
+-		assign(B);
++		base_matrix< T >::assign(B);
+ 		return *this;
+ 	}
+ 
+--- lidia-2.2.0/src/base/include/LiDIA/sparse_ring_matrix.h.orig	2006-03-06 13:24:06.000000000 +0100
++++ lidia-2.2.0/src/base/include/LiDIA/sparse_ring_matrix.h	2008-01-03 22:24:55.757150012 +0100
+@@ -103,7 +103,7 @@ public:
+ 
+ 	sparse_ring_matrix< T > & operator = (const sparse_ring_matrix< T > &B)
+ 	{
+-		assign(B);
++		sparse_base_matrix< T >::assign(B);
+ 		return *this;
+ 	}
+ 
+--- lidia-2.2.0/src/gec/include/LiDIA/prime_proof.h.orig	2006-03-06 13:24:10.000000000 +0100
++++ lidia-2.2.0/src/gec/include/LiDIA/prime_proof.h	2008-01-03 23:35:29.756560696 +0100
+@@ -114,59 +114,59 @@ public:
+ 	prime_proof (const bigint & p);
+         ~prime_proof();
+ 
+-	bool		prime_proof::prove_prime(const bigint & new_p);
+-	bool		prime_proof::prove_prime();
+-	bool 		prime_proof::verify_certificate(certificate & cert);
+-	certificate 	prime_proof::get_certificate();
+-	void 		prime_proof::set_verbose(bool verbose);
+-	void		prime_proof::set_classnumbers(const int min, const int max);
+-	void		prime_proof::set_pollard_rho_parameter(const int start_length,const int rounds);
+-	void		prime_proof::set_prime(const bigint & p);
+-	void		prime_proof::set_top(bool is_top);
+-	void		prime_proof::set_ecpp_mode(int mode);
+-	bool		prime_proof::spp(const bigint & spp_n);
+-	bool		prime_proof::spp_verify_proof_prime(const base_vector <bigint> cert_vector);
+-	bool		prime_proof::n_minus_one( const bigint & new_q, const bigint & new_p);
+-	bool		prime_proof::nmo_verify_proof_prime(base_vector <bigint> cert_vector);
+-	bool		prime_proof::n_plus_one( const bigint & new_q, const bigint & new_p);
+-	bool		prime_proof::npo_verify_proof_prime(base_vector <bigint> cert_vector);
+-	bool		prime_proof::ecpp();
+-	bool		prime_proof::ecpp_verify_proof(base_vector <bigint> cert_vector);
++	bool		prove_prime(const bigint & new_p);
++	bool		prove_prime();
++	bool 		verify_certificate(certificate & cert);
++	certificate 	get_certificate();
++	void 		set_verbose(bool verbose);
++	void		set_classnumbers(const int min, const int max);
++	void		set_pollard_rho_parameter(const int start_length,const int rounds);
++	void		set_prime(const bigint & p);
++	void		set_top(bool is_top);
++	void		set_ecpp_mode(int mode);
++	bool		spp(const bigint & spp_n);
++	bool		spp_verify_proof_prime(const base_vector <bigint> cert_vector);
++	bool		n_minus_one( const bigint & new_q, const bigint & new_p);
++	bool		nmo_verify_proof_prime(base_vector <bigint> cert_vector);
++	bool		n_plus_one( const bigint & new_q, const bigint & new_p);
++	bool		npo_verify_proof_prime(base_vector <bigint> cert_vector);
++	bool		ecpp();
++	bool		ecpp_verify_proof(base_vector <bigint> cert_vector);
+ 
+ 	
+ 	
+ 
+ private:
+-	bool		prime_proof::factorize_n_pm_one();
+-	bool		prime_proof::minus_one_test(bigint & biggest_prime_factor);
+-	bool 		prime_proof::plus_one_test(bigint & biggest_prime_factor);
+-	bool		prime_proof::ecpp_test();
+-	certificate	prime_proof::spp_get_certificate();
+-	certificate	prime_proof::nmo_get_certificate();
+-	certificate	prime_proof::npo_get_certificate();
+-	certificate	prime_proof::ecpp_get_certificate();
+-	bigmod		prime_proof::lucas_sequence(const bigint & r, const bigint & s, const bigint & d);
+-	bigint		prime_proof::found_divisor();
+-	bool		prime_proof::prove_n_with_curve ();
+-	void		prime_proof::calculate_prime_list();
+-	void		prime_proof::calculate_lower_bound_s();
+-	bool		prime_proof::prove_downstep(const bigint & r);
+-	bool		prime_proof::assign_class_invariant_to_curve( const gf_element & invariant );
+-	bool		prime_proof::assign_class_invariant_to_curve_case_minus_three();
+-	bool		prime_proof::assign_class_invariant_to_curve_case_minus_four();
+-	bigcomplex	prime_proof::class_invariant( const quadratic_form & Q );
+-	void		prime_proof::product_real( base_vector<bigfloat> & c,const base_vector<bigfloat> & a,const base_vector<bigfloat> & b );
+-	void		prime_proof::product_karatsuba( base_vector<bigfloat> & result, const base_vector<bigfloat> & f,const base_vector<bigfloat> & g);
+-	void		prime_proof::compute_class_polynomial();
+-	void		prime_proof::compute_class_polynomial_real();
+-	void		prime_proof::compute_class_polynomial_karatsuba_high_precision();
+-	void		prime_proof::compute_class_polynomial_karatsuba_low_precision();
+-	bool		prime_proof::find_next_discriminant(long start_h, long end_h);
+-	bool		prime_proof::is_good_order(bigint & t, bigint & y);
+-	bigint		prime_proof::pollard_rho(bigint & t);
+-	void		prime_proof::set_complex_precision();
+-	void		prime_proof::set_generation_mode();
+-	bool 		prime_proof::generate_curve();
++	bool		factorize_n_pm_one();
++	bool		minus_one_test(bigint & biggest_prime_factor);
++	bool 		plus_one_test(bigint & biggest_prime_factor);
++	bool		ecpp_test();
++	certificate	spp_get_certificate();
++	certificate	nmo_get_certificate();
++	certificate	npo_get_certificate();
++	certificate	ecpp_get_certificate();
++	bigmod		lucas_sequence(const bigint & r, const bigint & s, const bigint & d);
++	bigint		found_divisor();
++	bool		prove_n_with_curve ();
++	void		calculate_prime_list();
++	void		calculate_lower_bound_s();
++	bool		prove_downstep(const bigint & r);
++	bool		assign_class_invariant_to_curve( const gf_element & invariant );
++	bool		assign_class_invariant_to_curve_case_minus_three();
++	bool		assign_class_invariant_to_curve_case_minus_four();
++	bigcomplex	class_invariant( const quadratic_form & Q );
++	void		product_real( base_vector<bigfloat> & c,const base_vector<bigfloat> & a,const base_vector<bigfloat> & b );
++	void		product_karatsuba( base_vector<bigfloat> & result, const base_vector<bigfloat> & f,const base_vector<bigfloat> & g);
++	void		compute_class_polynomial();
++	void		compute_class_polynomial_real();
++	void		compute_class_polynomial_karatsuba_high_precision();
++	void		compute_class_polynomial_karatsuba_low_precision();
++	bool		find_next_discriminant(long start_h, long end_h);
++	bool		is_good_order(bigint & t, bigint & y);
++	bigint		pollard_rho(bigint & t);
++	void		set_complex_precision();
++	void		set_generation_mode();
++	bool 		generate_curve();
+ 
+ 	
+ 
+--- lidia-2.2.0/src/base/include/LiDIA/base/sf_bigint.h.orig	2006-03-06 13:24:06.000000000 +0100
++++ lidia-2.2.0/src/base/include/LiDIA/base/sf_bigint.h	2008-01-03 23:49:30.089443623 +0100
+@@ -230,6 +230,15 @@ private: // private members for MPQS
+ 	bool check_gcd(factorization< bigint > &, const bigmod &, const bigint&);
+ };
+ 
++factorization< bigint > TrialDiv(const bigint & N, const unsigned int upper_bound, const unsigned int lower_bound);
++factorization< bigint > PollardRho(const bigint& x, int size);
++factorization< bigint > PollardPminus1(const bigint& x, int size);
++factorization< bigint > WilliamsPplus1(const bigint& x, int size);
++factorization< bigint > Fermat(const bigint& x);
++factorization< bigint > ECM(const bigint & x, int upper_bound, int lower_bound, int step);
++factorization< bigint > MPQS(const bigint & x);
++factorization< bigint > sf_factor(const bigint & x, int size);
++factorization< bigint > completely_factor(const bigint & x);
+ 
+ 
+ inline void
